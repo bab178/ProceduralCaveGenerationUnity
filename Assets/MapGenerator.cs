@@ -20,6 +20,7 @@ public class MapGenerator : MonoBehaviour
 
     private enum wallType { Space, Wall }
 
+    private MeshGenerator meshGen;
 
     void Start()
     {
@@ -39,6 +40,8 @@ public class MapGenerator : MonoBehaviour
         map = new bool[Width, Height];
         RandomFillMap(RandomFillPercent);
         SmoothMap();
+        meshGen = GetComponent<MeshGenerator>();
+        meshGen.GenerateMesh(map, 1);
     }
 
     private void RandomFillMap(float percent)
@@ -114,21 +117,19 @@ public class MapGenerator : MonoBehaviour
         return wallCount;
     }
 
-    void OnDrawGizmos()
-    {
-        if(map != null)
-        {
-            for (int x = 0; x < Width; x++)
-            {
-                for (int y = 0; y < Height; y++)
-                {
-                    Gizmos.color = (map[x, y] == 1) ? Color.black : Color.white;
-                    Vector3 pos = new Vector3(-Width / 2 + x + 0.5f, 0, -Height / 2 + y + 0.5f);
-                    Gizmos.DrawCube(pos, Vector3.one);
-                }
-            }
-        }
-    }
-
-  
+    //void OnDrawGizmos()
+    //{
+    //    if(map != null)
+    //    {
+    //        for (int x = 0; x < Width; x++)
+    //        {
+    //            for (int y = 0; y < Height; y++)
+    //            {
+    //                Gizmos.color = (map[x, y]) ? Color.black : Color.white;
+    //                Vector3 pos = new Vector3(-Width / 2 + x + 0.5f, 0, -Height / 2 + y + 0.5f);
+    //                Gizmos.DrawCube(pos, Vector3.one);
+    //            }
+    //        }
+    //    }
+    //}
 }
