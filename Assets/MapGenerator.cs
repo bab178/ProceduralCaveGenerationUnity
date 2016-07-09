@@ -16,7 +16,7 @@ public class MapGenerator : MonoBehaviour
     [Range(0, 50)]
     public int SmoothMapCount;
 
-    private int[,] map;
+    private bool[,] map;
 
     private enum wallType { Space, Wall }
 
@@ -36,7 +36,7 @@ public class MapGenerator : MonoBehaviour
 
     private void GenerateMap()
     {
-        map = new int[Width, Height];
+        map = new bool[Width, Height];
         RandomFillMap(RandomFillPercent);
         SmoothMap();
     }
@@ -56,11 +56,11 @@ public class MapGenerator : MonoBehaviour
             {
                 if(x == 0 || x == Width - 1 || y == 0 || y == Height - 1)
                 {
-                    map[x, y] = (int) wallType.Wall;
+                    map[x, y] = true;
                 }
                 else
                 {
-                    map[x, y] = (pseudoRandom.Next(0, 100) < RandomFillPercent) ? (int) wallType.Wall : (int) wallType.Space;
+                    map[x, y] = pseudoRandom.Next(0, 100) < RandomFillPercent;
                 }
             }
         }
@@ -76,14 +76,15 @@ public class MapGenerator : MonoBehaviour
                 {
                     int count = GetSurroundingWallCount(x, y);
 
-                    if(count > 4)
+                    if (count > 4)
                     {
-                        map[x, y] = (int)wallType.Wall;
+                        map[x, y] = true;
                     }
                     else if(count < 4)
                     {
-                        map[x, y] = (int)wallType.Space;
+                        map[x, y] = false;
                     }
+                    // Skip == 4
                 }
             }
         }
@@ -101,7 +102,7 @@ public class MapGenerator : MonoBehaviour
                 {
                     if (neighborX != x || neighborY != y)
                     {
-                        wallCount += map[neighborX, neighborY];
+                        wallCount += (map[neighborX, neighborY]) ? 1 : 0;
                     }
                 }
                 else
