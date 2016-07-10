@@ -13,20 +13,20 @@ public class MeshGenerator : MonoBehaviour
     List<Vector3> vertices;
     List<int> triangles;
 
-    Dictionary<int, List<Triangle>> triangleDictionary = new Dictionary<int, List<Triangle>>();
-    List<List<int>> outlines = new List<List<int>>();
-    HashSet<int> checkedVertices = new HashSet<int>();
+    Dictionary<int, List<Triangle>> triangleDictionary;
+    List<List<int>> outlines;
+    HashSet<int> checkedVertices;
 
     public void GenerateMesh(int[,] map, float squareSize, float wallHeight)
     {
-        triangleDictionary.Clear();
-        outlines.Clear();
-        checkedVertices.Clear();
-
-        squareGrid = new SquareGrid(map, squareSize);
-
         vertices = new List<Vector3>();
         triangles = new List<int>();
+
+        triangleDictionary = new Dictionary<int, List<Triangle>>();
+        outlines = new List<List<int>>();
+        checkedVertices = new HashSet<int>();
+
+        squareGrid = new SquareGrid(map, squareSize);
 
         for (int x = 0; x < squareGrid.Squares.GetLength(0); x++)
         {
@@ -36,12 +36,11 @@ public class MeshGenerator : MonoBehaviour
             }
         }
 
-        Mesh mesh = new Mesh();
-        cave.mesh = mesh;
+        cave.mesh = new Mesh();
 
-        mesh.vertices = vertices.ToArray();
-        mesh.triangles = triangles.ToArray();
-        mesh.RecalculateNormals();
+        cave.mesh.vertices = vertices.ToArray();
+        cave.mesh.triangles = triangles.ToArray();
+        cave.mesh.RecalculateNormals();
 
         CreateWallMesh(wallHeight);
     }
@@ -52,7 +51,7 @@ public class MeshGenerator : MonoBehaviour
 
         List<Vector3> wallVertices = new List<Vector3>();
         List<int> wallTriangles = new List<int>();
-        Mesh wallMesh = new Mesh();
+        walls.mesh = new Mesh();
 
         foreach (List<int> outline in outlines)
         {
@@ -73,12 +72,15 @@ public class MeshGenerator : MonoBehaviour
                 wallTriangles.Add(startIndex + 0);
             }
         }
-        wallMesh.vertices = wallVertices.ToArray();
-        wallMesh.triangles = wallTriangles.ToArray();
-        walls.mesh = wallMesh;
+        walls.mesh.vertices = wallVertices.ToArray();
+        walls.mesh.triangles = wallTriangles.ToArray();
 
-        MeshCollider wallCollider = walls.gameObject.AddComponent<MeshCollider>();
-        wallCollider.sharedMesh = wallMesh;
+        MeshCollider wallCollider = walls.gameObject.GetComponent<MeshCollider>();
+        if (wallCollider == null)
+        {
+            wallCollider = walls.gameObject.AddComponent<MeshCollider>();
+        }
+        wallCollider.sharedMesh = walls.mesh;
     }
 
 
