@@ -44,13 +44,10 @@ public class MapGenerator : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            GenerateMap();
-        }
+       if (Input.GetButtonDown("ReloadMap")) { GenerateMap(); }
     }
 
-    private void GenerateMap()
+    public void GenerateMap()
     {
         GetComponent<Transform>().transform.localPosition = origin;
         GetComponent<Transform>().transform.localPosition = new Vector3(origin.x, WallHeight, origin.z);
