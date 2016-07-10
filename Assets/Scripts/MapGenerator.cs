@@ -54,6 +54,7 @@ public class MapGenerator : MonoBehaviour
     {
         GetComponent<Transform>().transform.localPosition = origin;
         GetComponent<Transform>().transform.localPosition = new Vector3(origin.x, WallHeight, origin.z);
+
         map = new int[Width, Height];
         RandomFillMap(RandomFillPercent);
         SmoothMap();
