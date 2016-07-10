@@ -30,12 +30,15 @@ public class MapGenerator : MonoBehaviour
 
     private enum wallType { Space, Wall }
 
+    private Vector3 origin;
+
     private MeshGenerator meshGen;
 
     List<Room> survivingRooms = new List<Room>();
 
     void Start()
     {
+        origin = GetComponent<Transform>().position;
         GenerateMap();
     }
 
@@ -49,6 +52,8 @@ public class MapGenerator : MonoBehaviour
 
     private void GenerateMap()
     {
+        GetComponent<Transform>().transform.localPosition = origin;
+        GetComponent<Transform>().transform.localPosition = new Vector3(origin.x, WallHeight, origin.z);
         map = new int[Width, Height];
         RandomFillMap(RandomFillPercent);
         SmoothMap();
@@ -75,6 +80,7 @@ public class MapGenerator : MonoBehaviour
 
         meshGen = GetComponent<MeshGenerator>();
         meshGen.GenerateMesh(borderedMap, TileSize, WallHeight);
+       
     }
 
     void ProcessMap()
