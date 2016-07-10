@@ -1,4 +1,4 @@
-# ProcedrualCaveGenerationUnity
+# ProceduralCaveGenerationUnity
 This is based off of the Procedural Cave Generation Tutorial by Unity
 
 Create 2D Array of integers with Cellular Automata (0 = Space, 1 = Walls)
